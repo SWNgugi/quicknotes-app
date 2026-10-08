@@ -178,6 +178,15 @@ button:hover {
     flex: none;
   }
 
+  #clear-all-btn {
+  background: #d00000;
+  margin-bottom: 16px;
+}
+
+#clear-all-btn:hover {
+  background: #a30000;
+}
+
   header {
     padding: 18px 12px;
   }
