@@ -2,8 +2,25 @@ const noteForm = document.querySelector("#note-form");
 const noteInput = document.querySelector("#note-input");
 const noteCategory = document.querySelector("#note-category");
 const notesList = document.querySelector("#notes-list");
+const errorMessage = document.querySelector("#error-message");
+const noteCount = document.querySelector("#note-count");
 
 let notes = [];
+
+function updateCount() {
+  if (notes.length === 0) {
+    noteCount.textContent = "You have no notes yet.";
+  } else if (notes.length === 1) {
+    noteCount.textContent = "You have 1 note.";
+  } else {
+    noteCount.textContent = `You have ${notes.length} notes.`;
+  }
+}
+
+function deleteNote(id) {
+  notes = notes.filter((note) => note.id !== id);
+  render();
+}
 
 function render() {
   notesList.textContent = "";
@@ -31,20 +48,31 @@ function render() {
     deleteBtn.classList.add("delete-btn");
     deleteBtn.type = "button";
     deleteBtn.textContent = "Delete";
+    deleteBtn.addEventListener("click", () => deleteNote(note.id));
 
     meta.append(category, date, deleteBtn);
     li.append(text, meta);
     notesList.append(li);
   }
+
+  updateCount();
 }
 
 noteForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const text = noteInput.value.trim();
+
   if (text === "") {
-    return; // Task 4 replaces this with an error message
+    errorMessage.textContent = "Please type a note first.";
+    return;
   }
+  if (text.length > 200) {
+    errorMessage.textContent = "Notes must be 200 characters or fewer.";
+    return;
+  }
+
+  errorMessage.textContent = "";
 
   const note = {
     id: Date.now(),
